@@ -7,6 +7,7 @@
     name: document.getElementById('name'),
     servings: document.getElementById('servings'),
     filter: document.getElementById('filter'),
+    categories: document.getElementById('categories'),
     shake: document.getElementById('shake'),
     all: document.getElementById('all'),
     viewRecipe: document.getElementById('view-recipe'),
@@ -15,8 +16,9 @@
     reset: document.getElementById('reset')
   };
 
-  var data = null;                                   // { list, byId }
+  var data = null;                                   // { list, byId, categories }
   var recipe = { name: '', servings: 1, qty: {} };
+  var activeCategory = null;                         // null = show all
 
   SB.loadIngredients()
     .then(function (loaded) {
@@ -29,6 +31,7 @@
       els.name.value = recipe.name;
       els.servings.value = SB.fmtQty(recipe.servings);
       bind();
+      renderChips();
       renderAll();
     })
     .catch(function (err) {
@@ -59,6 +62,16 @@
 
     els.filter.addEventListener('input', renderCatalog);
 
+    els.categories.addEventListener('click', function (ev) {
+      var chip = ev.target.closest('[data-category]');
+      if (!chip) return;
+      var picked = chip.dataset.category || null;
+      // Tapping the active chip clears it, so "All" is never a dead end.
+      activeCategory = (picked === activeCategory) ? null : picked;
+      renderChips();
+      renderCatalog();
+    });
+
     // Delegated so rows can be rebuilt freely.
     document.addEventListener('click', function (ev) {
       var btn = ev.target.closest('[data-step]');
@@ -81,7 +94,9 @@
       els.name.value = '';
       els.servings.value = '1';
       els.filter.value = '';
+      activeCategory = null;
       history.replaceState(null, '', location.pathname);
+      renderChips();
       renderAll();
     });
   }
@@ -120,16 +135,33 @@
     });
   }
 
+  function renderChips() {
+    els.categories.innerHTML = '';
+    [null].concat(data.categories).forEach(function (cat) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = cat || 'All';
+      if (cat) chip.dataset.category = cat;
+      else chip.dataset.category = '';
+      chip.setAttribute('aria-pressed', String(activeCategory === cat));
+      els.categories.appendChild(chip);
+    });
+  }
+
+  // Category chip and text filter are ANDed.
   function renderCatalog() {
     var q = els.filter.value.trim().toLowerCase();
     var matches = data.list.filter(function (ing) {
+      if (activeCategory && ing.category !== activeCategory) return false;
       return !q || ing.name.toLowerCase().indexOf(q) !== -1;
     });
 
     els.all.innerHTML = '';
     if (!matches.length) {
-      els.all.innerHTML = '<li class="empty">No ingredient matches “' +
-        escapeHtml(els.filter.value) + '”.</li>';
+      els.all.innerHTML = '<li class="empty">Nothing matches' +
+        (activeCategory ? ' in ' + escapeHtml(activeCategory) : '') +
+        (q ? ' for “' + escapeHtml(els.filter.value) + '”' : '') + '.</li>';
       return;
     }
     matches.forEach(function (ing) {
@@ -171,8 +203,11 @@
         'P ' + SB.fmtMacro(per('protein')) + ' · ' +
         'F ' + SB.fmtMacro(per('fat')) + ' · ' +
         'fib ' + SB.fmtMacro(m.fiber);
+    } else if (ing.unit.label === 'g') {
+      sub.textContent = ing.category + ' · measured in grams';
     } else {
-      sub.textContent = SB.fmtGrams(ing.unit.grams) + ' g per ' + ing.unit.label;
+      sub.textContent = ing.category + ' · ' +
+        SB.fmtGrams(ing.unit.grams) + ' g per ' + ing.unit.label;
     }
     item.appendChild(main);
 

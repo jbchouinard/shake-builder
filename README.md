@@ -26,30 +26,63 @@ page (see the caveat below).
 
 ## Editing ingredients
 
-Everything lives in `ingredients.json`. The seeded values are **generic reference data** and
-every entry is marked `"verified": false` — the builder shows a small `•` next to any
-unverified ingredient. Replace them with the numbers from your own packaging and flip the flag.
+Everything lives in `ingredients.json`. The 15 entries are the products in
+`ingredients.txt`, with `per100g` derived from the serving size printed on each packaging
+screenshot in this folder.
 
 ```json
 {
-  "id": "whey-isolate",
-  "name": "Whey protein isolate",
-  "unit": { "label": "scoop", "plural": "scoops", "grams": 30 },
+  "id": "on-whey-chocolate",
+  "name": "Gold Standard Whey, choc",
+  "category": "Protein",
+  "unit": { "label": "scoop", "plural": "scoops", "grams": 32 },
   "step": 0.5,
-  "per100g": { "kcal": 370, "carb": 5, "fiber": 0, "protein": 86, "fat": 2 },
-  "cronometerName": "Whey Protein Isolate Powder",
-  "verified": false
+  "per100g": { "kcal": 375, "carb": 9.38, "fiber": 1.56, "protein": 75, "fat": 6.25 },
+  "cronometerName": "Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada",
+  "verified": true
 }
 ```
 
 | Field | Notes |
 | --- | --- |
 | `id` | Lowercase, `[a-z0-9-]`, unique. **This is the URL query key**, so renaming it breaks any saved links. Cannot be `n` or `s` (reserved). |
+| `name` | Short label for the UI only. Kept separate from `cronometerName` because the full database names run to four wrapped lines on a phone. |
+| `category` | Must appear in the top-level `categories` array. Drives the filter chips. |
 | `unit.grams` | Mass of one natural unit. This is the only conversion — liquids get a mass per cup like anything else. |
 | `step` | Increment for the `+`/`−` buttons. `0.5` for scoops, `0.25` for cups, `1` for whole items. |
-| `per100g` | All nutrients per 100 g. `carb` is **total** carbohydrate, fiber included. |
-| `cronometerName` | The text written onto the recipe page. Kept separate from `name` — see below. |
-| `verified` | `false` until you've checked the numbers against packaging. |
+| `per100g` | All nutrients per 100 g, at 2 dp. `carb` is **total** carbohydrate, fiber included. |
+| `cronometerName` | The exact Cronometer database name. This is what gets written onto the recipe page and has to match on import. |
+| `verified` | `false` until you've checked the numbers against packaging. Shows a `•` in the builder. |
+
+Three entries are `verified: false` — **banana, frozen raspberries, frozen strawberries**.
+There were no screenshots for the fruits, so those use USDA reference values.
+
+### Deriving `per100g` from a label
+
+Take the printed serving size and scale to 100 g. The Gold Standard scoop is 32 g with 2 g
+fat, so `2 × 100 ÷ 32 = 6.25`. Keep 2 decimal places: at 1 dp that becomes `6.2`, which
+visibly drifts once multiplied back up to a real serving.
+
+Two conversions worth knowing about:
+
+- **Liquids** (soy beverage, milk, canned pumpkin) are labelled per mL, not per gram. They're
+  entered as 1 mL ≈ 1 g, so macros per cup come out exactly as printed and only the gram
+  figure carries a ~3% slip.
+- **Dextrose** has no scoop or volume on the label, only a 5 g serving, so it's dosed directly
+  in grams with a step of 5. Its ingredient line omits the redundant `(… g)` parenthetical.
+
+### Categories
+
+The top-level `categories` array defines both the chip order and the grouping of the
+ingredient list:
+
+```json
+"categories": ["Protein", "Base", "Carbs", "Other"]
+```
+
+Chips filter the "Add ingredients" list and combine with the text box. Tapping the active chip
+clears it. Adding a category means adding it here *and* to the relevant ingredients — an
+ingredient whose `category` isn't in this array logs an error and never appears under a chip.
 
 ### Carbs and fiber
 
@@ -70,7 +103,7 @@ saving the recipe.
 The recipe is fully encoded in the query string — no storage, no server:
 
 ```
-recipe.html?n=Post-workout&s=1&whey-isolate=2&milk-2pct=1&banana=1
+recipe.html?n=Post-workout&s=1&on-whey-chocolate=1&nutrilait-milk-1=1&banana=1
 ```
 
 - `n` — recipe name
@@ -90,9 +123,9 @@ in the import dialog use *"copy and paste the ingredients here"* and paste. One 
 line, grams first:
 
 ```
-60 g Whey Protein Isolate Powder (2 scoops)
-244 g Milk, 2% Milkfat (1 cup)
-118 g Bananas, Raw (1 medium)
+32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada (1 scoop)
+250 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F. (1 cup)
+118 g Banana, Fresh (1 medium)
 ```
 
 Grams-first is deliberate: Cronometer matches a weight far more reliably than it guesses what
@@ -104,7 +137,7 @@ built in your browser from the query parameters. Fetch the page without running 
 the ingredient list is literally empty:
 
 ```sh
-curl -s 'http://localhost:8000/recipe.html?whey-isolate=2' | grep -c recipeIngredient   # -> 0
+curl -s 'http://localhost:8000/recipe.html?banana=1' | grep -c recipeIngredient   # -> 0
 ```
 
 If Cronometer's fetcher executes JavaScript it will see the full recipe, complete with
@@ -127,8 +160,12 @@ formatting, malformed-input handling, and `ingredients.json` integrity. Worth ru
 editing ingredient data — it checks fiber never exceeds total carbs, and cross-checks stated
 calories against 4/4/9 on net carbs to catch typos.
 
-That cross-check is informational, not a failure. Cocoa powder legitimately trips it: USDA
-applies food-specific Atwater factors to cocoa, so 4/4/9 overestimates it by about 30%.
+That cross-check is informational, not a failure. Three entries legitimately trip it:
+
+- **Fry's cocoa** — the label is per 5 g, so every value is rounded to the nearest 0.5 g and
+  the error is enormous once scaled ×20.
+- **Frozen raspberries** and **Prana chia** — very high fiber, and fiber does contribute *some*
+  energy, so subtracting all of it underestimates calories.
 
 ## Layout
 
@@ -140,5 +177,7 @@ js/builder.js     builder logic
 js/recipe.js      recipe page logic
 css/styles.css    mobile-first, light and dark
 ingredients.json  the ingredient database
+ingredients.txt   the source product list, by category
+*_nutrition.*     packaging screenshots the per100g values were read from
 test.js           headless checks
 ```

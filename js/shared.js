@@ -17,13 +17,14 @@
       })
       .then(function (data) {
         var list = (data && data.ingredients) || [];
-        validate(list);
-        return { list: list, byId: index(list) };
+        var categories = (data && data.categories) || [];
+        validate(list, categories);
+        return { list: list, byId: index(list), categories: categories };
       });
   }
 
   // Bad ids silently produce wrong recipes, so complain loudly instead.
-  function validate(list) {
+  function validate(list, categories) {
     var seen = Object.create(null);
     list.forEach(function (ing, i) {
       var where = 'ingredients[' + i + ']';
@@ -43,6 +44,11 @@
           console.error(where + ' (' + ing.id + '): per100g.' + m + ' is missing');
         }
       });
+      // An unlisted category would silently vanish from the filter chips.
+      if (categories.length && categories.indexOf(ing.category) === -1) {
+        console.error(where + ' (' + ing.id + '): category "' + ing.category +
+          '" is not in the top-level categories list');
+      }
       if (ing.per100g && ing.per100g.fiber > ing.per100g.carb) {
         console.error(where + ' (' + ing.id + '): fiber exceeds total carb, so net carbs ' +
           'would be negative — carb must be TOTAL carbohydrate, fiber included');
