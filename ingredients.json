@@ -10,7 +10,7 @@
   "ingredients": [
     {
       "id": "zammex-hydro-pea",
-      "name": "Hydro Pea",
+      "name": "Hydro pea protein",
       "category": "Protein",
       "unit": {
         "label": "scoop",
@@ -30,7 +30,7 @@
     },
     {
       "id": "naked-pb",
-      "name": "Naked PB (powdered)",
+      "name": "PB powder",
       "category": "Protein",
       "unit": {
         "label": "scoop",
@@ -50,7 +50,7 @@
     },
     {
       "id": "on-whey-chocolate",
-      "name": "Gold Standard Whey, choc",
+      "name": "ON whey, chocolate",
       "category": "Protein",
       "unit": {
         "label": "scoop",
@@ -70,14 +70,14 @@
     },
     {
       "id": "natura-soy-unsweetened",
-      "name": "Soy beverage, unsweetened",
+      "name": "Soy milk, unsweetened",
       "category": "Base",
       "unit": {
         "label": "cup",
         "plural": "cups",
         "grams": 250
       },
-      "step": 0.25,
+      "step": 0.5,
       "per100g": {
         "kcal": 32.0,
         "carb": 1.2,
@@ -117,7 +117,7 @@
         "plural": "cups",
         "grams": 250
       },
-      "step": 0.25,
+      "step": 0.5,
       "per100g": {
         "kcal": 44.0,
         "carb": 4.8,
@@ -190,7 +190,7 @@
     },
     {
       "id": "ed-smith-pumpkin",
-      "name": "Pure pumpkin",
+      "name": "Canned pumpkin",
       "category": "Carbs",
       "unit": {
         "label": "cup",
@@ -210,7 +210,7 @@
     },
     {
       "id": "frys-cocoa",
-      "name": "Cocoa",
+      "name": "Cocoa powder",
       "category": "Other",
       "unit": {
         "label": "tbsp",
@@ -290,7 +290,7 @@
     },
     {
       "id": "prana-chia-black",
-      "name": "Chia, black",
+      "name": "Chia seeds, black",
       "category": "Other",
       "unit": {
         "label": "tbsp",
