@@ -153,11 +153,11 @@
       "name": "Sweet potato powder",
       "category": "Carbs",
       "unit": {
-        "label": "cup",
-        "plural": "cups",
-        "grams": 120
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 7.5
       },
-      "step": 0.25,
+      "step": 1,
       "per100g": {
         "kcal": 333.33,
         "carb": 83.33,

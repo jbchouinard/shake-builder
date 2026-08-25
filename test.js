@@ -90,8 +90,25 @@ const lineFor = id => SB.ingredientLines(t)[t.lines.findIndex(l => l.ingredient.
 eq('line is quantity + name only', lineFor('on-whey-chocolate'),
    '32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada');
 eq('no parenthetical (fruit)', lineFor('banana'), '118 g Banana, Fresh');
+// Half grams are kept: rounding 62.5 to 63 discards precision the fractional
+// steps exist to give you.
 eq('no parenthetical (fractional)', SB.ingredientLines(SB.computeTotals(frac, list))[0],
-   '63 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.');
+   '62.5 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.');
+eq('whole grams stay whole', SB.fmtGrams(118), '118');
+eq('half grams survive', SB.fmtGrams(22.5), '22.5');
+
+// Sweet potato powder is dosed by tbsp so it can be dialled in ~6.25 g carb steps;
+// by the quarter-cup its smallest step was 25 g of carbs.
+console.log('\n--- 4b. sweet potato powder granularity ---');
+const sp = byId['yupik-sweet-potato-powder'];
+eq('unit is tbsp', sp.unit.label, 'tbsp');
+eq('1 tbsp = 7.5 g (one sixteenth of a 120 g cup)', sp.unit.grams, 7.5);
+eq('4 tbsp reconciles with the 1/4 cup label serving', sp.unit.grams * 4, 30);
+const spCarbStep = sp.unit.grams * sp.per100g.carb / 100;
+eq('carb per tbsp', Math.round(spCarbStep * 100) / 100, 6.25);
+eq('line at 3 tbsp',
+   SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { 'yupik-sweet-potato-powder': 3 } }, list))[0],
+   '22.5 g Yupik, Organic Sweet Potato Powder');
 eq('gram-dosed ingredient',
    SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { dextrose: 25 } }, list))[0],
    '25 g Texturestar, Dextrose Powder');

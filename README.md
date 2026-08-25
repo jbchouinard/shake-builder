@@ -74,6 +74,12 @@ Two conversions worth knowing about:
   figure carries a ~3% slip.
 - **Dextrose** has no scoop or volume on the label, only a 5 g serving, so it's dosed directly
   in grams with a step of 5, and its recipe line shows no separate natural amount.
+- **Sweet potato powder** is dosed by the tbsp (7.5 g, one sixteenth of its 120 g cup) rather
+  than the quarter-cup its label uses. At a quarter-cup the smallest step was 25 g of carbs,
+  far too coarse to dial in; a tbsp steps by about 6.25 g.
+
+Pick `unit` for the granularity you need, not just the measure the label happens to print.
+Weights are shown to one decimal, so half-gram units stay honest.
 
 ### Categories
 

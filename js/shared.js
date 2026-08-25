@@ -153,7 +153,11 @@
   }
 
   function fmtQty(n) { return trimNum(n); }
-  function fmtGrams(n) { return Math.round(n); }
+
+  // One decimal, trailing zeros dropped: whole grams for most things, but units
+  // smaller than a scoop land on halves (1 tbsp of sweet potato powder is 7.5 g)
+  // and rounding those to whole grams throws away the precision they exist for.
+  function fmtGrams(n) { return trimNum(Math.round(n * 10) / 10); }
   function fmtMacro(n) { return trimNum(Math.round(n * 10) / 10); }
   function fmtKcal(n) { return String(Math.round(n)); }
 
