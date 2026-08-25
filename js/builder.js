@@ -126,7 +126,7 @@
 
     if (!active.length) {
       els.shake.innerHTML =
-        '<li class="empty">Nothing yet — add ingredients below.</li>';
+        '<li class="empty">Nothing yet — add ingredients above.</li>';
       return;
     }
 

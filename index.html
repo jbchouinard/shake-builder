@@ -24,15 +24,17 @@
     </label>
   </div>
 
-  <h2 id="shake-heading">Your shake</h2>
-  <ul class="list" id="shake"></ul>
-
+  <!-- Catalog sits above "Your shake" deliberately: adding an ingredient grows the
+       section below it, so the row you just tapped never moves under your finger. -->
   <h2>Add ingredients</h2>
   <div class="chips" id="categories" role="group" aria-label="Filter by category"></div>
   <div class="field">
     <input type="text" id="filter" placeholder="Filter ingredients…" autocomplete="off">
   </div>
   <ul class="list" id="all"></ul>
+
+  <h2 id="shake-heading">Your shake</h2>
+  <ul class="list" id="shake"></ul>
 
   <div class="actions">
     <button class="btn" id="copy-link" type="button">Copy link</button>
