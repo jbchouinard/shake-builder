@@ -1,0 +1,6 @@
+# Packaging photos the per100g values were transcribed from. Kept locally as the
+# source of truth for verifying the numbers, but not committed: they are the
+# manufacturers' copyrighted product images. The nutrition facts themselves are
+# facts, not creative work, so ingredients.json is fine to publish.
+*_nutrition.jpg
+*_nutrition.png

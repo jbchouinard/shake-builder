@@ -26,8 +26,13 @@ as-is.
 ## Editing ingredients
 
 Everything lives in `ingredients.json`. The 15 entries are the products in
-`ingredients.txt`, with `per100g` derived from the serving size printed on each packaging
-screenshot in this folder.
+`ingredients.txt`, with `per100g` derived from the serving size printed on each product's
+packaging.
+
+The packaging photos those numbers came from are kept locally but are **not** committed — they
+are the manufacturers' copyrighted product images, and this is a public repo. The nutrition
+figures themselves are facts rather than creative work, so `ingredients.json` is fine to
+publish. `.gitignore` covers `*_nutrition.jpg` and `*_nutrition.png`.
 
 ```json
 {
@@ -146,7 +151,6 @@ js/recipe.js      recipe page logic
 css/styles.css    mobile-first, light and dark
 ingredients.json  the ingredient database
 ingredients.txt   the source product list, by category
-*_nutrition.*     packaging screenshots the per100g values were read from
 test.js           headless checks
 ```
 
