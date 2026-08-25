@@ -1,0 +1,324 @@
+:root {
+  --bg: #f6f7f4;
+  --surface: #ffffff;
+  --border: #e2e5dd;
+  --text: #1c2119;
+  --muted: #6b7365;
+  --accent: #3f7d3a;
+  --accent-soft: #eaf3e8;
+  --accent-text: #ffffff;
+  --warn: #a8600f;
+  --radius: 12px;
+  --bar-h: 84px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14170f;
+    --surface: #1d211a;
+    --border: #2e3428;
+    --text: #e8ece3;
+    --muted: #9aa392;
+    --accent: #7cbb6f;
+    --accent-soft: #232b1f;
+    --accent-text: #10140c;
+    --warn: #d99a4a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow-wrap: break-word;
+}
+
+.wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px calc(var(--bar-h) + 32px);
+}
+
+h1 {
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  margin: 4px 0 16px;
+}
+
+h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 24px 0 8px;
+}
+
+/* ---------- form controls ---------- */
+
+label { display: block; }
+
+.field { margin-bottom: 12px; }
+
+.field > span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  /* 16px minimum: anything smaller makes iOS zoom on focus. */
+  font: inherit;
+  font-size: 16px;
+  padding: 11px 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.row-2 { display: flex; gap: 12px; }
+.row-2 .field:first-child { flex: 1; }
+.row-2 .field:last-child { width: 96px; }
+
+/* ---------- ingredient rows ---------- */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.list li + li { border-top: 1px solid var(--border); }
+
+/* Wraps so the detail line gets the full row width instead of the ~180px left
+   over beside the stepper, which forced every row onto two lines. */
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 12px;
+  padding: 10px 12px;
+  min-height: 56px;
+}
+
+.item.on { background: var(--accent-soft); }
+
+.item-main { flex: 1; min-width: 0; }
+
+.item-name { display: block; }
+
+.item-sub {
+  flex-basis: 100%;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.unverified {
+  color: var(--warn);
+  cursor: help;
+}
+
+/* ---------- stepper ---------- */
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+
+.stepper button {
+  width: 44px;
+  height: 44px;
+  font: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.stepper button:active { background: var(--accent-soft); }
+
+.stepper .qty {
+  min-width: 46px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.add {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  font: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--accent);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* ---------- buttons ---------- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn {
+  flex: 1 1 auto;
+  min-height: 44px;
+  padding: 11px 16px;
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- sticky totals ---------- */
+
+.totals {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.totals-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.macros {
+  flex: 1;
+  display: flex;
+  gap: 14px;
+}
+
+.macro { text-align: left; }
+
+.macro b {
+  display: block;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.macro span {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.totals .btn { flex: none; }
+
+/* ---------- recipe page ---------- */
+
+.recipe-ingredients {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.recipe-ingredients li { margin-bottom: 6px; }
+
+table.nutrition {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.nutrition th,
+.nutrition td {
+  padding: 9px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrition th:first-child,
+.nutrition td:first-child { text-align: left; font-weight: 400; }
+
+.nutrition thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.nutrition tbody tr:last-child td { border-bottom: 0; }
+
+.note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 16px 0 0;
+}
+
+.empty {
+  padding: 16px 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.banner {
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  font-size: 0.88rem;
+}
+
+.recipe-page .wrap { padding-bottom: 32px; }

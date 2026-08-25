@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shake recipe</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="recipe-page">
+<div class="wrap" id="recipe" itemscope itemtype="https://schema.org/Recipe">
+
+  <div id="banner" hidden class="banner"></div>
+
+  <h1 itemprop="name" id="r-name">Shake</h1>
+  <p class="note" id="r-yield">Makes <span itemprop="recipeYield">1</span> serving.</p>
+
+  <h2>Ingredients</h2>
+  <ul class="recipe-ingredients" id="r-ingredients"></ul>
+
+  <h2>Nutrition</h2>
+  <table class="nutrition">
+    <thead>
+      <tr><th scope="col">&nbsp;</th><th scope="col">Per serving</th><th scope="col">Total</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Calories</td><td id="r-kcal">0</td><td id="r-kcal-t">0</td></tr>
+      <tr><td><b>Net carbs (g)</b></td><td id="r-netCarb">0</td><td id="r-netCarb-t">0</td></tr>
+      <tr><td>&nbsp;&nbsp;Total carbs (g)</td><td id="r-carb">0</td><td id="r-carb-t">0</td></tr>
+      <tr><td>&nbsp;&nbsp;Fiber (g)</td><td id="r-fiber">0</td><td id="r-fiber-t">0</td></tr>
+      <tr><td>Protein (g)</td><td id="r-protein">0</td><td id="r-protein-t">0</td></tr>
+      <tr><td>Fat (g)</td><td id="r-fat">0</td><td id="r-fat-t">0</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Send to Cronometer</h2>
+  <div class="actions">
+    <button class="btn btn-primary" id="copy-ingredients" type="button">Copy ingredients</button>
+    <a class="btn" id="cronometer" href="https://cronometer.com/#foods" target="_blank" rel="noopener">Open Cronometer</a>
+    <a class="btn" id="edit" href="index.html">Edit recipe</a>
+  </div>
+
+  <p class="note">
+    In Cronometer: <b>Foods → Custom Recipes → Import Recipe</b>. Paste this page's URL to try
+    the automatic importer; if it comes back empty, use <b>“copy and paste the ingredients
+    here”</b> and paste the copied list instead. Cronometer matches these names against its own
+    database, so check the matched foods before saving.
+  </p>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/recipe.js"></script>
+</body>
+</html>

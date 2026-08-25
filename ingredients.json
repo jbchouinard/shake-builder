@@ -1,0 +1,386 @@
+{
+  "version": 1,
+  "_note": "Values are per 100 g and come from generic reference data. carb is TOTAL carbohydrate and includes fiber; the app displays net carbs (carb - fiber). Every entry has \"verified\": false until you check it against your actual packaging.",
+  "ingredients": [
+    {
+      "id": "whey-isolate",
+      "name": "Whey protein isolate",
+      "unit": {
+        "label": "scoop",
+        "plural": "scoops",
+        "grams": 30
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 370,
+        "carb": 5,
+        "fiber": 0.0,
+        "protein": 86,
+        "fat": 2
+      },
+      "cronometerName": "Whey Protein Isolate Powder",
+      "verified": false
+    },
+    {
+      "id": "whey-concentrate",
+      "name": "Whey protein concentrate",
+      "unit": {
+        "label": "scoop",
+        "plural": "scoops",
+        "grams": 30
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 400,
+        "carb": 10,
+        "fiber": 0.0,
+        "protein": 76,
+        "fat": 6
+      },
+      "cronometerName": "Whey Protein Concentrate Powder",
+      "verified": false
+    },
+    {
+      "id": "casein",
+      "name": "Casein protein",
+      "unit": {
+        "label": "scoop",
+        "plural": "scoops",
+        "grams": 33
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 370,
+        "carb": 10,
+        "fiber": 0.0,
+        "protein": 75,
+        "fat": 3
+      },
+      "cronometerName": "Casein Protein Powder",
+      "verified": false
+    },
+    {
+      "id": "milk-2pct",
+      "name": "Milk, 2%",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 244
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 50,
+        "carb": 4.8,
+        "fiber": 0.0,
+        "protein": 3.3,
+        "fat": 2.0
+      },
+      "cronometerName": "Milk, 2% Milkfat",
+      "verified": false
+    },
+    {
+      "id": "milk-skim",
+      "name": "Milk, skim",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 245
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 34,
+        "carb": 5.0,
+        "fiber": 0.0,
+        "protein": 3.4,
+        "fat": 0.2
+      },
+      "cronometerName": "Milk, Nonfat",
+      "verified": false
+    },
+    {
+      "id": "almond-milk",
+      "name": "Almond milk, unsweetened",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 240
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 15,
+        "carb": 0.6,
+        "fiber": 0.3,
+        "protein": 0.6,
+        "fat": 1.2
+      },
+      "cronometerName": "Almond Milk, Unsweetened",
+      "verified": false
+    },
+    {
+      "id": "soy-milk",
+      "name": "Soy milk, unsweetened",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 243
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 43,
+        "carb": 3.6,
+        "fiber": 0.4,
+        "protein": 3.3,
+        "fat": 1.8
+      },
+      "cronometerName": "Soy Milk, Unsweetened",
+      "verified": false
+    },
+    {
+      "id": "greek-yogurt",
+      "name": "Greek yogurt, nonfat",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 227
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 59,
+        "carb": 3.6,
+        "fiber": 0.0,
+        "protein": 10.3,
+        "fat": 0.4
+      },
+      "cronometerName": "Greek Yogurt, Plain, Nonfat",
+      "verified": false
+    },
+    {
+      "id": "banana",
+      "name": "Banana",
+      "unit": {
+        "label": "medium",
+        "plural": "medium",
+        "grams": 118
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 89,
+        "carb": 22.8,
+        "fiber": 2.6,
+        "protein": 1.1,
+        "fat": 0.3
+      },
+      "cronometerName": "Bananas, Raw",
+      "verified": false
+    },
+    {
+      "id": "oats",
+      "name": "Rolled oats, dry",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 81
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 389,
+        "carb": 66.3,
+        "fiber": 10.6,
+        "protein": 16.9,
+        "fat": 6.9
+      },
+      "cronometerName": "Oats, Rolled, Dry",
+      "verified": false
+    },
+    {
+      "id": "peanut-butter",
+      "name": "Peanut butter",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 16
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 588,
+        "carb": 20.0,
+        "fiber": 6.0,
+        "protein": 25.0,
+        "fat": 50.0
+      },
+      "cronometerName": "Peanut Butter, Smooth",
+      "verified": false
+    },
+    {
+      "id": "almond-butter",
+      "name": "Almond butter",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 16
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 614,
+        "carb": 18.8,
+        "fiber": 10.3,
+        "protein": 21.0,
+        "fat": 55.5
+      },
+      "cronometerName": "Almond Butter, Plain",
+      "verified": false
+    },
+    {
+      "id": "chia-seeds",
+      "name": "Chia seeds",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 12
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 486,
+        "carb": 42.1,
+        "fiber": 34.4,
+        "protein": 16.5,
+        "fat": 30.7
+      },
+      "cronometerName": "Chia Seeds, Dried",
+      "verified": false
+    },
+    {
+      "id": "flaxseed",
+      "name": "Flaxseed, ground",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 7
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 534,
+        "carb": 28.9,
+        "fiber": 27.3,
+        "protein": 18.3,
+        "fat": 42.2
+      },
+      "cronometerName": "Flaxseed, Ground",
+      "verified": false
+    },
+    {
+      "id": "mixed-berries",
+      "name": "Frozen mixed berries",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 140
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 50,
+        "carb": 12.0,
+        "fiber": 4.0,
+        "protein": 0.7,
+        "fat": 0.3
+      },
+      "cronometerName": "Mixed Berries, Frozen, Unsweetened",
+      "verified": false
+    },
+    {
+      "id": "spinach",
+      "name": "Baby spinach",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 30
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 23,
+        "carb": 3.6,
+        "fiber": 2.2,
+        "protein": 2.9,
+        "fat": 0.4
+      },
+      "cronometerName": "Spinach, Raw",
+      "verified": false
+    },
+    {
+      "id": "avocado",
+      "name": "Avocado",
+      "unit": {
+        "label": "half",
+        "plural": "halves",
+        "grams": 100
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 160,
+        "carb": 8.5,
+        "fiber": 6.7,
+        "protein": 2.0,
+        "fat": 14.7
+      },
+      "cronometerName": "Avocados, Raw",
+      "verified": false
+    },
+    {
+      "id": "cocoa-powder",
+      "name": "Cocoa powder, unsweetened",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 5
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 228,
+        "carb": 57.9,
+        "fiber": 33.2,
+        "protein": 19.6,
+        "fat": 13.7
+      },
+      "cronometerName": "Cocoa Powder, Unsweetened",
+      "verified": false
+    },
+    {
+      "id": "honey",
+      "name": "Honey",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 21
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 304,
+        "carb": 82.4,
+        "fiber": 0.2,
+        "protein": 0.3,
+        "fat": 0.0
+      },
+      "cronometerName": "Honey",
+      "verified": false
+    },
+    {
+      "id": "medjool-dates",
+      "name": "Medjool dates",
+      "unit": {
+        "label": "date",
+        "plural": "dates",
+        "grams": 24
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 277,
+        "carb": 75.0,
+        "fiber": 6.7,
+        "protein": 1.8,
+        "fat": 0.2
+      },
+      "cronometerName": "Dates, Medjool",
+      "verified": false
+    }
+  ]
+}
