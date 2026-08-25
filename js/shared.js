@@ -162,18 +162,14 @@
     return qty === 1 ? u.label : (u.plural || u.label);
   }
 
-  // "60 g Zammex, Hydro Pea" -- quantity then food name, nothing else.
-  //
-  // Cronometer appears to treat everything after the quantity as the food name to
-  // search, so a trailing "(2 scoops)" became part of the search string and wrecked
-  // matching. The natural amount is shown next to this on the recipe page instead,
-  // outside the text that gets copied or marked up.
+  // "60 g Zammex, Hydro Pea" -- the plain-text form used by the copy buttons.
+  // Weight first, then the full product name as it appears in Cronometer's database.
   function ingredientLine(line) {
     var ing = line.ingredient;
     return fmtGrams(line.grams) + ' g ' + (ing.cronometerName || ing.name);
   }
 
-  // "2 scoops" -- the human-readable amount, kept out of ingredientLine.
+  // "2 scoops" -- how you actually measure it, as opposed to what it weighs.
   // Empty for ingredients dosed directly in grams, where it would just repeat.
   function naturalAmount(line) {
     var ing = line.ingredient;

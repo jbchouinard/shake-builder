@@ -291,15 +291,30 @@ button:focus-visible {
 
 /* ---------- recipe page ---------- */
 
+/* Name on its own line, amount beneath: the name is what you type into
+   Cronometer's search, so it should not have to be picked out of a sentence. */
 .recipe-ingredients {
+  list-style: none;
   margin: 0;
-  padding-left: 22px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
 }
 
-.recipe-ingredients li { margin-bottom: 6px; }
+.recipe-ingredients li { padding: 10px 12px; }
 
-/* Sits outside the itemprop span: readable for a human, invisible to the parser. */
-.amount { color: var(--muted); }
+.recipe-ingredients li + li { border-top: 1px solid var(--border); }
+
+.ing-name { display: block; }
+
+.ing-amount {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
 
 table.nutrition {
   width: 100%;

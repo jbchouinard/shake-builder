@@ -7,12 +7,12 @@
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="recipe-page">
-<div class="wrap" id="recipe" itemscope itemtype="https://schema.org/Recipe">
+<div class="wrap" id="recipe">
 
   <div id="banner" hidden class="banner"></div>
 
-  <h1 itemprop="name" id="r-name">Shake</h1>
-  <p class="note" id="r-yield">Makes <span itemprop="recipeYield">1</span> serving.</p>
+  <h1 id="r-name">Shake</h1>
+  <p class="note" id="r-yield">Makes 1 serving.</p>
 
   <h2>Ingredients</h2>
   <ul class="recipe-ingredients" id="r-ingredients"></ul>
@@ -32,19 +32,10 @@
     </tbody>
   </table>
 
-  <h2>Send to Cronometer</h2>
   <div class="actions">
-    <button class="btn btn-primary" id="copy-ingredients" type="button">Copy ingredients</button>
-    <a class="btn" id="cronometer" href="https://cronometer.com/#foods" target="_blank" rel="noopener">Open Cronometer</a>
-    <a class="btn" id="edit" href="index.html">Edit recipe</a>
+    <button class="btn" id="copy-ingredients" type="button">Copy ingredients</button>
+    <a class="btn btn-primary" id="edit" href="index.html">Edit recipe</a>
   </div>
-
-  <p class="note">
-    In Cronometer: <b>Foods → Custom Recipes → Import Recipe</b>. Paste this page's URL to try
-    the automatic importer; if it comes back empty, use <b>“copy and paste the ingredients
-    here”</b> and paste the copied list instead. Cronometer matches these names against its own
-    database, so check the matched foods before saving.
-  </p>
 
 </div>
 

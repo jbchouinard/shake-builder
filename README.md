@@ -1,7 +1,7 @@
 # Shake Builder
 
 A static, no-build web app for composing shakes in the units you actually measure them in
-(scoops, cups, tbsp), seeing macros update live, and handing the result to Cronometer.
+(scoops, cups, tbsp) and seeing the macros update live.
 
 - **`index.html`** — the builder. Tap `+`/`−`, watch the totals bar.
 - **`recipe.html`** — a shareable recipe page. The whole recipe lives in the URL.
@@ -21,8 +21,7 @@ python3 -m http.server 8000
 ## Deploying to GitHub Pages
 
 Push the repo, then Settings → Pages → deploy from branch, root folder. The files are served
-as-is. You need a public URL for Cronometer's URL importer to have any chance of reaching the
-page (see the caveat below).
+as-is.
 
 ## Editing ingredients
 
@@ -51,7 +50,7 @@ screenshot in this folder.
 | `unit.grams` | Mass of one natural unit. This is the only conversion — liquids get a mass per cup like anything else. |
 | `step` | Increment for the `+`/`−` buttons. `0.5` for scoops, `0.25` for cups, `1` for whole items. |
 | `per100g` | All nutrients per 100 g, at 2 dp. `carb` is **total** carbohydrate, fiber included. |
-| `cronometerName` | The exact Cronometer database name. This is what gets written onto the recipe page and has to match on import. |
+| `cronometerName` | The exact Cronometer database name, shown on the recipe page so you know what to search for. |
 | `verified` | `false` until you've checked the numbers against packaging. Shows a `•` in the builder. |
 
 Three entries are `verified: false` — **banana, frozen raspberries, frozen strawberries**.
@@ -69,7 +68,7 @@ Two conversions worth knowing about:
   entered as 1 mL ≈ 1 g, so macros per cup come out exactly as printed and only the gram
   figure carries a ~3% slip.
 - **Dextrose** has no scoop or volume on the label, only a 5 g serving, so it's dosed directly
-  in grams with a step of 5. Its ingredient line omits the redundant `(… g)` parenthetical.
+  in grams with a step of 5, and its recipe line shows no separate natural amount.
 
 ### Categories
 
@@ -91,12 +90,16 @@ ingredient whose `category` isn't in this array logs an error and never appears 
 out total carbs and fiber separately. `netCarb` is always derived at display time, never
 stored, so it cannot drift out of sync.
 
-### Matching your actual products
+### Logging a shake in Cronometer
 
-Cronometer matches the ingredient names it receives against *its* database, whose entries may
-not be your tub of whey. If you create Custom Foods in Cronometer and put their exact names in
-`cronometerName`, matching becomes deterministic. Either way, check the matched foods before
-saving the recipe.
+Entry is manual: Cronometer's recipe importer could not match these products (see
+[Why there is no importer integration](#why-there-is-no-importer-integration)), so the recipe
+page is built as a transcription sheet instead. Each ingredient shows the exact
+`cronometerName` to search for, with the weight beneath it.
+
+Expect the app's totals and Cronometer's to differ slightly. The app computes from the values
+transcribed off your packaging; your Cronometer recipe uses whichever database entries you
+pick. Neither is wrong, they are just different sources.
 
 ## URL format
 
@@ -113,66 +116,6 @@ recipe.html?n=Post-workout&s=1&on-whey-chocolate=1&nutrilait-milk-1=1&banana=1
 Parameters are emitted in `ingredients.json` order, so the same shake always produces the same
 URL. Both pages accept the same query string, which is how "Edit recipe" round-trips. The URL
 is safe to hand-edit.
-
-## Importing into Cronometer
-
-In Cronometer: **Foods → Custom Recipes → Import Recipe**.
-
-**Paste the ingredients.** Hit *Copy ingredients* on the recipe page, then in the import dialog
-use *"copy and paste the ingredients here"* and paste. One ingredient per line, quantity first:
-
-```
-32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada
-250 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.
-118 g Banana, Fresh
-```
-
-Grams-first is deliberate: Cronometer matches a weight far more reliably than it guesses what
-a "scoop" weighs.
-
-### Tuning the match
-
-**Cronometer's matcher struggles with these products.** An early version of this app appended
-the natural amount — `32 g … Canada (1 scoop)` — and matching was hopeless: Hydro Pea matched
-*frozen green peas*, Naked PB matched ordinary *peanut butter*. Cronometer appears to treat
-everything after the quantity as the food name to search, so the parenthetical became part of
-the search string. It now lives outside the copied text and outside the microdata, shown only
-on the page for you.
-
-If matching is still poor, `cronometerName` is the knob — it's deliberately separate from the
-display `name`, so you can rewrite it freely without touching the UI. Things worth trying:
-
-- **Drop the commas.** They're in the Cronometer database entries, but a fuzzy matcher may
-  split on them and weight the fragments oddly.
-- **Drop `, Canada`** from the Optimum Nutrition entry, and other locale suffixes. If the
-  matcher favours the US databases, that suffix can only hurt.
-- **Lead with the distinguishing word** rather than the brand — `Hydro Pea Protein Zammex`
-  instead of `Zammex, Hydro Pea` — so the strongest token isn't buried behind a brand name the
-  matcher doesn't recognise.
-- **Create Custom Foods** in Cronometer using the values in `ingredients.json`, and set
-  `cronometerName` to their exact names. Slowest to set up, but it's the only option that
-  makes matching deterministic instead of probabilistic.
-
-Whatever you land on, check the matched foods before saving the recipe — a wrong match is
-silent and will quietly corrupt the day's numbers.
-
-**The URL path — best-effort.** Pasting the recipe page's URL into the importer may work, but
-**probably will not**, and the reason is structural: this is a static site, so the recipe is
-built in your browser from the query parameters. Fetch the page without running JavaScript and
-the ingredient list is literally empty:
-
-```sh
-curl -s 'http://localhost:8000/recipe.html?banana=1' | grep -c recipeIngredient   # -> 0
-```
-
-If Cronometer's fetcher executes JavaScript it will see the full recipe, complete with
-schema.org `Recipe` JSON-LD and microdata; if it doesn't, it sees nothing. The page emits both
-metadata formats to maximise the odds, but this is untestable from here — try it once against
-your deployed URL and you'll know.
-
-If you later want the URL path to work reliably, the fix is a prerender shim (a Cloudflare
-Worker or Netlify Edge Function) that renders the query params into HTML server-side. That's a
-backend, which this project deliberately doesn't have.
 
 ## Tests
 
@@ -206,3 +149,24 @@ ingredients.txt   the source product list, by category
 *_nutrition.*     packaging screenshots the per100g values were read from
 test.js           headless checks
 ```
+
+## Why there is no importer integration
+
+Cronometer has a recipe importer that takes a URL or a pasted ingredient list, and an earlier
+version of this app targeted it. It does not work for these products.
+
+Pasting an ingredient list matched 0 of 15 ingredients, and the failures were not near misses:
+Hydro Pea matched *frozen green peas*, Naked PB matched ordinary *peanut butter*, Fry's cocoa
+matched *Paprika Seasoning*. Two rounds of tuning the emitted text — dropping a trailing
+`(2 scoops)` that was being swallowed into the search string, then simplifying the names — got
+it to 1 of 15. The one that worked was Optimum Nutrition Gold Standard.
+
+That result is consistent: the importer ranks the official databases (USDA, NCCDB) ahead of
+the community-submitted CRDB, and every product here except Gold Standard exists only in CRDB.
+The entries are findable in Cronometer's own search, but the importer will not rank them.
+Sending the exact CRDB name fights that ranking rather than working with it, and no string
+tuning reliably wins.
+
+Manual entry, saved as a Cronometer recipe for combinations you repeat, is less work than
+fighting the matcher on every shake. The schema.org `Recipe` markup and the URL-import support
+that existed for this were removed once that became clear.

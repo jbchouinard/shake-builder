@@ -1,4 +1,4 @@
-/* Recipe page: render a plain, scrapable recipe document from the query string. */
+/* Recipe page: render the recipe named by the query string. */
 (function () {
   'use strict';
 
@@ -25,8 +25,8 @@
     document.getElementById('r-name').textContent = name;
 
     var yieldEl = document.getElementById('r-yield');
-    yieldEl.innerHTML = 'Makes <span itemprop="recipeYield">' +
-      SB.fmtQty(totals.servings) + '</span> serving' + (totals.servings === 1 ? '' : 's') + '.';
+    yieldEl.textContent = 'Makes ' + SB.fmtQty(totals.servings) +
+      ' serving' + (totals.servings === 1 ? '' : 's') + '.';
 
     var lines = SB.ingredientLines(totals);
     var ul = document.getElementById('r-ingredients');
@@ -34,25 +34,21 @@
     if (!lines.length) {
       ul.innerHTML = '<li class="empty">This recipe is empty.</li>';
     }
-    totals.lines.forEach(function (line, i) {
+    // Name first and on its own line: it is the string you search for in Cronometer,
+    // so it should be readable without picking it out of a sentence.
+    totals.lines.forEach(function (line) {
       var li = document.createElement('li');
 
-      // itemprop sits on the span, not the li, so the microdata value is exactly
-      // the clean "60 g Name" string. Microdata as well as JSON-LD below, since we
-      // cannot see which one the importer prefers.
-      var main = document.createElement('span');
-      main.setAttribute('itemprop', 'recipeIngredient');
-      main.textContent = lines[i];
-      li.appendChild(main);
+      var name = document.createElement('span');
+      name.className = 'ing-name';
+      name.textContent = line.ingredient.cronometerName || line.ingredient.name;
+      li.appendChild(name);
 
-      // Outside the itemprop: for you, not for the parser.
-      var amount = SB.naturalAmount(line);
-      if (amount) {
-        var note = document.createElement('span');
-        note.className = 'amount';
-        note.textContent = ' · ' + amount;
-        li.appendChild(note);
-      }
+      var amount = document.createElement('span');
+      amount.className = 'ing-amount';
+      var natural = SB.naturalAmount(line);
+      amount.textContent = SB.fmtGrams(line.grams) + ' g' + (natural ? ' · ' + natural : '');
+      li.appendChild(amount);
 
       ul.appendChild(li);
     });
@@ -64,8 +60,6 @@
       setNum('r-' + m + '-t', SB.fmtMacro(totals.total[m]));
     });
 
-    injectJsonLd(name, lines, totals);
-
     document.getElementById('edit').href =
       'index.html' + (location.search || '');
 
@@ -74,37 +68,6 @@
       if (!lines.length) return flash(btn, 'Nothing to copy', 'Copy ingredients');
       copy(lines.join('\n'), function () { flash(btn, 'Copied ✓', 'Copy ingredients'); });
     });
-  }
-
-  // Nutrition values carry units, per schema.org/NutritionInformation, and are per serving.
-  function injectJsonLd(name, lines, totals) {
-    var per = totals.perServing;
-    var doc = {
-      '@context': 'https://schema.org',
-      '@type': 'Recipe',
-      name: name,
-      recipeCategory: 'Beverage',
-      recipeYield: SB.fmtQty(totals.servings) + ' serving' + (totals.servings === 1 ? '' : 's'),
-      recipeIngredient: lines,
-      nutrition: {
-        '@type': 'NutritionInformation',
-        servingSize: '1 serving',
-        calories: SB.fmtKcal(per.kcal) + ' kcal',
-        // Label semantics: carbohydrateContent is TOTAL carbohydrate, fiber included.
-        // Net carbs are ours to display, not a schema.org field, so we publish both
-        // components and let the consumer derive it.
-        carbohydrateContent: SB.fmtMacro(per.carb) + ' g',
-        fiberContent: SB.fmtMacro(per.fiber) + ' g',
-        proteinContent: SB.fmtMacro(per.protein) + ' g',
-        fatContent: SB.fmtMacro(per.fat) + ' g'
-      }
-    };
-
-    var el = document.getElementById('ld') || document.createElement('script');
-    el.id = 'ld';
-    el.type = 'application/ld+json';
-    el.textContent = JSON.stringify(doc, null, 2);
-    if (!el.parentNode) document.head.appendChild(el);
   }
 
   function setNum(id, value) {
