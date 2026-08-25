@@ -34,11 +34,26 @@
     if (!lines.length) {
       ul.innerHTML = '<li class="empty">This recipe is empty.</li>';
     }
-    lines.forEach(function (text) {
+    totals.lines.forEach(function (line, i) {
       var li = document.createElement('li');
-      // Microdata as well as JSON-LD below: we cannot see which one the importer prefers.
-      li.setAttribute('itemprop', 'recipeIngredient');
-      li.textContent = text;
+
+      // itemprop sits on the span, not the li, so the microdata value is exactly
+      // the clean "60 g Name" string. Microdata as well as JSON-LD below, since we
+      // cannot see which one the importer prefers.
+      var main = document.createElement('span');
+      main.setAttribute('itemprop', 'recipeIngredient');
+      main.textContent = lines[i];
+      li.appendChild(main);
+
+      // Outside the itemprop: for you, not for the parser.
+      var amount = SB.naturalAmount(line);
+      if (amount) {
+        var note = document.createElement('span');
+        note.className = 'amount';
+        note.textContent = ' · ' + amount;
+        li.appendChild(note);
+      }
+
       ul.appendChild(li);
     });
 

@@ -298,6 +298,9 @@ button:focus-visible {
 
 .recipe-ingredients li { margin-bottom: 6px; }
 
+/* Sits outside the itemprop span: readable for a human, invisible to the parser. */
+.amount { color: var(--muted); }
+
 table.nutrition {
   width: 100%;
   border-collapse: collapse;

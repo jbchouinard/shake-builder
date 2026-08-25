@@ -162,16 +162,23 @@
     return qty === 1 ? u.label : (u.plural || u.label);
   }
 
-  // "60 g Whey Protein Isolate Powder (2 scoops)" -- grams first, because that is
-  // what Cronometer's matcher handles most reliably.
+  // "60 g Zammex, Hydro Pea" -- quantity then food name, nothing else.
+  //
+  // Cronometer appears to treat everything after the quantity as the food name to
+  // search, so a trailing "(2 scoops)" became part of the search string and wrecked
+  // matching. The natural amount is shown next to this on the recipe page instead,
+  // outside the text that gets copied or marked up.
   function ingredientLine(line) {
     var ing = line.ingredient;
-    var name = ing.cronometerName || ing.name;
-    var text = fmtGrams(line.grams) + ' g ' + name;
-    if (ing.unit.label !== 'g') {
-      text += ' (' + fmtQty(line.qty) + ' ' + unitLabel(ing, line.qty) + ')';
-    }
-    return text;
+    return fmtGrams(line.grams) + ' g ' + (ing.cronometerName || ing.name);
+  }
+
+  // "2 scoops" -- the human-readable amount, kept out of ingredientLine.
+  // Empty for ingredients dosed directly in grams, where it would just repeat.
+  function naturalAmount(line) {
+    var ing = line.ingredient;
+    if (ing.unit.label === 'g') return '';
+    return fmtQty(line.qty) + ' ' + unitLabel(ing, line.qty);
   }
 
   function ingredientLines(totals) {
@@ -187,6 +194,7 @@
     computeTotals: computeTotals,
     ingredientLine: ingredientLine,
     ingredientLines: ingredientLines,
+    naturalAmount: naturalAmount,
     unitLabel: unitLabel,
     fmtQty: fmtQty,
     fmtGrams: fmtGrams,

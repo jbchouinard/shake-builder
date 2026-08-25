@@ -85,15 +85,25 @@ eq('no float drift in URL', SB.encodeRecipe(frac, list).includes('0.25'), true);
 console.log('\n--- 4. ingredient lines (what Cronometer receives) ---');
 SB.ingredientLines(t).forEach(l => console.log('     ' + l));
 const lineFor = id => SB.ingredientLines(t)[t.lines.findIndex(l => l.ingredient.id === id)];
-eq('singular unit', lineFor('on-whey-chocolate'),
-   '32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada (1 scoop)');
-eq('singular unit (fruit)', lineFor('banana'), '118 g Banana, Fresh (1 medium)');
-eq('fractional unit', SB.ingredientLines(SB.computeTotals(frac, list))[0],
-   '63 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F. (0.25 cups)');
-// unit.label === 'g' suppresses the redundant parenthetical.
+// Quantity then food name, nothing else: anything trailing lands in the search
+// string Cronometer matches on, which is what broke ingredient matching.
+eq('line is quantity + name only', lineFor('on-whey-chocolate'),
+   '32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada');
+eq('no parenthetical (fruit)', lineFor('banana'), '118 g Banana, Fresh');
+eq('no parenthetical (fractional)', SB.ingredientLines(SB.computeTotals(frac, list))[0],
+   '63 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.');
 eq('gram-dosed ingredient',
    SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { dextrose: 25 } }, list))[0],
    '25 g Texturestar, Dextrose Powder');
+eq('no line contains a parenthetical',
+   SB.ingredientLines(t).filter(l => /[()]/.test(l)).length, 0);
+
+// The natural amount still exists, just separately from the parsed line.
+const lineObj = id => t.lines.find(l => l.ingredient.id === id);
+eq('natural amount, plural', SB.naturalAmount(lineObj('on-whey-chocolate')), '1 scoop');
+eq('natural amount, fruit', SB.naturalAmount(lineObj('banana')), '1 medium');
+eq('natural amount empty for gram-dosed',
+   SB.naturalAmount(SB.computeTotals({ servings: 1, qty: { dextrose: 25 } }, list).lines[0]), '');
 
 console.log('\n--- 5. edge cases (should degrade, not throw) ---');
 const empty = SB.decodeRecipe('', byId);

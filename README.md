@@ -118,18 +118,43 @@ is safe to hand-edit.
 
 In Cronometer: **Foods → Custom Recipes → Import Recipe**.
 
-**The reliable path — paste the ingredients.** Hit *Copy ingredients* on the recipe page, then
-in the import dialog use *"copy and paste the ingredients here"* and paste. One ingredient per
-line, grams first:
+**Paste the ingredients.** Hit *Copy ingredients* on the recipe page, then in the import dialog
+use *"copy and paste the ingredients here"* and paste. One ingredient per line, quantity first:
 
 ```
-32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada (1 scoop)
-250 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F. (1 cup)
-118 g Banana, Fresh (1 medium)
+32 g Optimum Nutrition, Gold Standard, 100% Whey, Extreme Milk Chocolate, Canada
+250 g Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.
+118 g Banana, Fresh
 ```
 
 Grams-first is deliberate: Cronometer matches a weight far more reliably than it guesses what
-a "scoop" weighs. This path works on free accounts and does not depend on any scraping.
+a "scoop" weighs.
+
+### Tuning the match
+
+**Cronometer's matcher struggles with these products.** An early version of this app appended
+the natural amount — `32 g … Canada (1 scoop)` — and matching was hopeless: Hydro Pea matched
+*frozen green peas*, Naked PB matched ordinary *peanut butter*. Cronometer appears to treat
+everything after the quantity as the food name to search, so the parenthetical became part of
+the search string. It now lives outside the copied text and outside the microdata, shown only
+on the page for you.
+
+If matching is still poor, `cronometerName` is the knob — it's deliberately separate from the
+display `name`, so you can rewrite it freely without touching the UI. Things worth trying:
+
+- **Drop the commas.** They're in the Cronometer database entries, but a fuzzy matcher may
+  split on them and weight the fragments oddly.
+- **Drop `, Canada`** from the Optimum Nutrition entry, and other locale suffixes. If the
+  matcher favours the US databases, that suffix can only hurt.
+- **Lead with the distinguishing word** rather than the brand — `Hydro Pea Protein Zammex`
+  instead of `Zammex, Hydro Pea` — so the strongest token isn't buried behind a brand name the
+  matcher doesn't recognise.
+- **Create Custom Foods** in Cronometer using the values in `ingredients.json`, and set
+  `cronometerName` to their exact names. Slowest to set up, but it's the only option that
+  makes matching deterministic instead of probabilistic.
+
+Whatever you land on, check the matched foods before saving the recipe — a wrong match is
+silent and will quietly corrupt the day's numbers.
 
 **The URL path — best-effort.** Pasting the recipe page's URL into the importer may work, but
 **probably will not**, and the reason is structural: this is a static site, so the recipe is
