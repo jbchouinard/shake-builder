@@ -149,23 +149,23 @@
       "verified": true
     },
     {
-      "id": "yupik-sweet-potato-powder",
-      "name": "Sweet potato powder",
+      "id": "cyclic-dextrin",
+      "name": "Cyclic Dextrin",
       "category": "Carbs",
       "unit": {
-        "label": "tbsp",
-        "plural": "tbsp",
-        "grams": 7.5
+        "label": "scoop",
+        "plural": "scoops",
+        "grams": 25
       },
-      "step": 1,
+      "step": 0.5,
       "per100g": {
-        "kcal": 333.33,
-        "carb": 83.33,
-        "fiber": 3.33,
-        "protein": 3.33,
-        "fat": 1.0
+        "kcal": 392.0,
+        "carb": 100.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
       },
-      "cronometerName": "Yupik, Organic Sweet Potato Powder",
+      "cronometerName": "Applied Nutrition, Carb-X, 100% Cyclic Dextrin Carbohydrates",
       "verified": true
     },
     {
@@ -195,7 +195,7 @@
       "unit": {
         "label": "cup",
         "plural": "cups",
-        "grams": 249
+        "grams": 250
       },
       "step": 0.25,
       "per100g": {
@@ -275,7 +275,7 @@
       "unit": {
         "label": "cup",
         "plural": "cups",
-        "grams": 149
+        "grams": 150
       },
       "step": 0.25,
       "per100g": {
@@ -297,7 +297,7 @@
         "plural": "tbsp",
         "grams": 10
       },
-      "step": 1,
+      "step": 0.5,
       "per100g": {
         "kcal": 466.67,
         "carb": 40.0,
