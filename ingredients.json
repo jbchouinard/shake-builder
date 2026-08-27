@@ -133,11 +133,11 @@
       "name": "Dextrose",
       "category": "Carbs",
       "unit": {
-        "label": "g",
-        "plural": "g",
-        "grams": 1
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 10
       },
-      "step": 5,
+      "step": 1,
       "per100g": {
         "kcal": 400.0,
         "carb": 100.0,
