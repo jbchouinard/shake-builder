@@ -45,7 +45,7 @@ const labelCheck = [
   ['natura-soy-unsweetened', 250, { kcal: 80, carb: 3, fiber: 1, protein: 8, fat: 3.5 }],
   ['dextrose', 5, { kcal: 20, carb: 5, fiber: 0, protein: 0, fat: 0 }],
   ['quaker-instant-oats', 30, { kcal: 110, carb: 20, fiber: 3, protein: 4, fat: 2 }],
-  ['yupik-sweet-potato-powder', 30, { kcal: 100, carb: 25, fiber: 1, protein: 1, fat: 0.3 }],
+  ['cyclic-dextrin', 25, { kcal: 98, carb: 25, fiber: 0, protein: 0, fat: 0 }],
   ['ed-smith-pumpkin', 83, { kcal: 30, carb: 7, fiber: 2, protein: 1, fat: 0 }],
   ['frys-cocoa', 5, { kcal: 20, carb: 2, fiber: 2, protein: 1, fat: 0.5 }],
   ['prana-chia-black', 15, { kcal: 70, carb: 6, fiber: 5, protein: 2, fat: 4.5 }],
@@ -97,30 +97,37 @@ eq('no parenthetical (fractional)', SB.ingredientLines(SB.computeTotals(frac, li
 eq('whole grams stay whole', SB.fmtGrams(118), '118');
 eq('half grams survive', SB.fmtGrams(22.5), '22.5');
 
-// Sweet potato powder is dosed by tbsp so it can be dialled in ~6.25 g carb steps;
-// by the quarter-cup its smallest step was 25 g of carbs.
-console.log('\n--- 4b. sweet potato powder granularity ---');
-const sp = byId['yupik-sweet-potato-powder'];
-eq('unit is tbsp', sp.unit.label, 'tbsp');
-eq('1 tbsp = 7.5 g (one sixteenth of a 120 g cup)', sp.unit.grams, 7.5);
-eq('4 tbsp reconciles with the 1/4 cup label serving', sp.unit.grams * 4, 30);
-const spCarbStep = sp.unit.grams * sp.per100g.carb / 100;
-eq('carb per tbsp', Math.round(spCarbStep * 100) / 100, 6.25);
-eq('line at 3 tbsp',
-   SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { 'yupik-sweet-potato-powder': 3 } }, list))[0],
-   '22.5 g Yupik, Organic Sweet Potato Powder');
-eq('gram-dosed ingredient',
-   SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { dextrose: 25 } }, list))[0],
-   '25 g Texturestar, Dextrose Powder');
+// Cyclic dextrin is a pure-carb powder dosed by the scoop: one 25 g scoop is,
+// at 100 g carb per 100 g, exactly 25 g of carbs.
+console.log('\n--- 4b. cyclic dextrin ---');
+const cd = byId['cyclic-dextrin'];
+eq('unit is scoop', cd.unit.label, 'scoop');
+eq('1 scoop = 25 g', cd.unit.grams, 25);
+const cdCarbStep = cd.unit.grams * cd.per100g.carb / 100;
+eq('carb per scoop', Math.round(cdCarbStep * 100) / 100, 25);
+eq('line at 2 scoops',
+   SB.ingredientLines(SB.computeTotals({ servings: 1, qty: { 'cyclic-dextrin': 2 } }, list))[0],
+   '50 g Applied Nutrition, Carb-X, 100% Cyclic Dextrin Carbohydrates');
 eq('no line contains a parenthetical',
    SB.ingredientLines(t).filter(l => /[()]/.test(l)).length, 0);
+
+// No ingredient is dosed directly in grams any more, but shared.js still supports
+// it (unit.label === 'g' suppresses the natural amount). Cover that path with a
+// synthetic ingredient.
+console.log('\n--- 4c. gram-dosed ingredient (synthetic) ---');
+const gramDosed = {
+  id: 'test-gram', name: 'Test', cronometerName: 'Test, Gram Dosed', category: 'Carbs',
+  unit: { label: 'g', plural: 'g', grams: 1 }, step: 5,
+  per100g: { kcal: 400, carb: 100, fiber: 0, protein: 0, fat: 0 }
+};
+const gdTotals = SB.computeTotals({ servings: 1, qty: { 'test-gram': 25 } }, [gramDosed]);
+eq('gram-dosed line is grams + name', SB.ingredientLines(gdTotals)[0], '25 g Test, Gram Dosed');
+eq('gram-dosed natural amount is empty', SB.naturalAmount(gdTotals.lines[0]), '');
 
 // The natural amount still exists, just separately from the parsed line.
 const lineObj = id => t.lines.find(l => l.ingredient.id === id);
 eq('natural amount, plural', SB.naturalAmount(lineObj('on-whey-chocolate')), '1 scoop');
 eq('natural amount, fruit', SB.naturalAmount(lineObj('banana')), '1 medium');
-eq('natural amount empty for gram-dosed',
-   SB.naturalAmount(SB.computeTotals({ servings: 1, qty: { dextrose: 25 } }, list).lines[0]), '');
 
 console.log('\n--- 5. edge cases (should degrade, not throw) ---');
 const empty = SB.decodeRecipe('', byId);
@@ -135,7 +142,7 @@ eq('s=0 falls back to 1', bad.servings, 1);
 eq('s=0 no divide-by-zero', SB.fmtKcal(SB.computeTotals(bad, list).perServing.kcal), 0);
 
 console.log('\n--- 6. ingredients.json integrity ---');
-eq('ingredient count', list.length, 15);
+eq('ingredient count', list.length, 30);
 eq('unique ids', new Set(list.map(i => i.id)).size, list.length);
 eq('no reserved-key collision', list.filter(i => ['n', 's'].includes(i.id)).length, 0);
 eq('all ids well-formed', list.filter(i => !/^[a-z0-9-]+$/.test(i.id)).length, 0);
@@ -146,7 +153,7 @@ eq('fiber <= total carb everywhere', list.filter(i => i.per100g.fiber > i.per100
 
 console.log('\n--- 6b. categories ---');
 const cats = data.categories;
-eq('declared categories', JSON.stringify(cats), JSON.stringify(['Protein', 'Base', 'Carbs', 'Other']));
+eq('declared categories', JSON.stringify(cats), JSON.stringify(['Protein', 'Base', 'Carbs', 'Fruit', 'Flavor']));
 eq('every ingredient has a declared category',
    list.filter(i => !cats.includes(i.category)).length, 0);
 eq('no empty category', cats.filter(c => !list.some(i => i.category === c)).join(',') || 'none', 'none');
@@ -173,6 +180,90 @@ list.forEach(i => {
   }
 });
 if (!warned) console.log('     all ingredients within 25%');
+
+console.log('\n--- 8. saved recipes (localStorage) ---');
+(function () {
+  var map = new Map();
+  var fakeStorage = {
+    throws: false,
+    getItem: function (k) { return map.has(k) ? map.get(k) : null; },
+    setItem: function (k, v) {
+      if (fakeStorage.throws) throw new Error('QuotaExceededError');
+      map.set(k, String(v));
+    },
+    removeItem: function (k) { map.delete(k); }
+  };
+  win.localStorage = fakeStorage;
+
+  new Function('window', fs.readFileSync(path.join(root, 'js/store.js'), 'utf8'))(win);
+  const Store = win.SBStore;
+
+  // save -> load round-trips name and query
+  const r1 = Store.save('Morning Shake', 'n=Morning+Shake&banana=1');
+  eq('save ok', r1.ok, true);
+  eq('save is not a replace', r1.replaced, false);
+  eq('load count after first save', Store.load().length, 1);
+  eq('round-trip name', Store.load()[0].name, 'Morning Shake');
+  eq('round-trip query', Store.load()[0].query, 'n=Morning+Shake&banana=1');
+
+  // saving an existing name replaces rather than appends, and moves it to the front
+  Store.save('Second Shake', 'banana=2');
+  const r2 = Store.save('morning shake', 'banana=3');   // different case/whitespace on purpose
+  eq('replace flagged', r2.replaced, true);
+  const afterReplace = Store.load();
+  eq('count stays at 2 after replace', afterReplace.length, 2);
+  eq('replaced entry moved to front', afterReplace[0].name, 'morning shake');
+  eq('replaced entry query updated', afterReplace[0].query, 'banana=3');
+
+  // find() is case- and whitespace-insensitive
+  eq('find exact', Store.find('Second Shake') !== -1, true);
+  eq('find case/whitespace-insensitive', Store.find('  SECOND shake  ') !== -1, true);
+  eq('find missing', Store.find('Nope'), -1);
+
+  // remove() drops the entry; removing a missing name is a no-op
+  eq('remove existing', Store.remove('Second Shake'), true);
+  eq('remove missing is a no-op', Store.remove('Second Shake'), false);
+  eq('count after remove', Store.load().length, 1);
+
+  // rename()
+  const ren1 = Store.rename('morning shake', 'Renamed Shake');
+  eq('rename ok', ren1.ok, true);
+  eq('renamed entry present', Store.find('Renamed Shake') !== -1, true);
+  Store.save('Other Shake', 'banana=4');
+  const ren2 = Store.rename('Renamed Shake', 'Other Shake');
+  eq('rename onto existing name is refused', ren2.ok, false);
+  eq('rename onto existing name reason', ren2.reason, 'exists');
+  eq('rename onto existing name changes nothing',
+     Store.find('Renamed Shake') !== -1 && Store.find('Other Shake') !== -1, true);
+
+  // corrupt JSON in the key -> load() returns [] and does not throw
+  win.localStorage.setItem('shake-builder.recipes', '{not json');
+  eq('corrupt JSON -> empty load', Store.load().length, 0);
+  eq('corrupt JSON does not throw', (function () {
+    try { Store.load(); return true; } catch (e) { return false; }
+  })(), true);
+
+  // a storage that throws on setItem
+  win.localStorage.setItem('shake-builder.recipes', JSON.stringify({ v: 1, recipes: [] }));
+  fakeStorage.throws = true;
+  eq('available() false when storage throws', Store.available(), false);
+  const r3 = Store.save('Whatever', 'banana=1');
+  eq('save() reports failure when storage throws', r3.ok, false);
+  fakeStorage.throws = false;
+
+  // exportJson() -> importJson() into a cleared store reproduces the same list
+  win.localStorage.removeItem('shake-builder.recipes');
+  Store.save('Export Me', 'banana=1');
+  Store.save('Export Too', 'banana=2');
+  const dump = Store.exportJson();
+  win.localStorage.removeItem('shake-builder.recipes');
+  const imp = Store.importJson(dump);
+  eq('import ok', imp.ok, true);
+  eq('import added count', imp.added, 2);
+  eq('import replaced count', imp.replaced, 0);
+  eq('import reproduces the exported list',
+     JSON.stringify(Store.load()), JSON.stringify(JSON.parse(dump).recipes));
+})();
 
 console.log(`\n${fails === 0 ? 'ALL PASS' : fails + ' FAILURE(S)'}`);
 process.exit(fails ? 1 : 0);

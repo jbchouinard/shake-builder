@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#faf7ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0c15" media="(prefers-color-scheme: dark)">
 <title>Shake recipe</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -10,6 +12,7 @@
 <div class="wrap" id="recipe">
 
   <div id="banner" hidden class="banner"></div>
+  <p class="nav"><a href="saved.html">Saved recipes</a></p>
 
   <h1 id="r-name">Shake</h1>
   <p class="note" id="r-yield">Makes 1 serving.</p>
@@ -33,6 +36,7 @@
   </table>
 
   <div class="actions">
+    <button class="btn" id="save-recipe" type="button">Save</button>
     <button class="btn" id="copy-ingredients" type="button">Copy ingredients</button>
     <a class="btn btn-primary" id="edit" href="index.html">Edit recipe</a>
   </div>
@@ -40,6 +44,7 @@
 </div>
 
 <script src="js/shared.js"></script>
+<script src="js/store.js"></script>
 <script src="js/recipe.js"></script>
 </body>
 </html>

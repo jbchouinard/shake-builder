@@ -5,6 +5,7 @@ A static, no-build web app for composing shakes in the units you actually measur
 
 - **`index.html`** — the builder. Tap `+`/`−`, watch the totals bar.
 - **`recipe.html`** — a shareable recipe page. The whole recipe lives in the URL.
+- **`saved.html`** — recipes you've saved, kept in this browser's `localStorage`.
 
 No dependencies, no build step, no backend.
 
@@ -37,7 +38,7 @@ publish. `.gitignore` covers `*_nutrition.jpg` and `*_nutrition.png`.
 ```json
 {
   "id": "on-whey-chocolate",
-  "name": "Gold Standard Whey, choc",
+  "name": "ON whey, chocolate",
   "category": "Protein",
   "unit": { "label": "scoop", "plural": "scoops", "grams": 32 },
   "step": 0.5,
@@ -67,16 +68,17 @@ Take the printed serving size and scale to 100 g. The Gold Standard scoop is 32 
 fat, so `2 × 100 ÷ 32 = 6.25`. Keep 2 decimal places: at 1 dp that becomes `6.2`, which
 visibly drifts once multiplied back up to a real serving.
 
-Two conversions worth knowing about:
+A couple of things worth knowing about:
 
 - **Liquids** (soy beverage, milk, canned pumpkin) are labelled per mL, not per gram. They're
   entered as 1 mL ≈ 1 g, so macros per cup come out exactly as printed and only the gram
   figure carries a ~3% slip.
-- **Dextrose** has no scoop or volume on the label, only a 5 g serving, so it's dosed directly
-  in grams with a step of 5, and its recipe line shows no separate natural amount.
-- **Sweet potato powder** is dosed by the tbsp (7.5 g, one sixteenth of its 120 g cup) rather
-  than the quarter-cup its label uses. At a quarter-cup the smallest step was 25 g of carbs,
-  far too coarse to dial in; a tbsp steps by about 6.25 g.
+- **Pure-carb powders** (dextrose, cyclic dextrin) are 100 g carbohydrate per 100 g. Dextrose
+  is dosed by the tbsp (10 g), cyclic dextrin by its 25 g scoop; choose the `step` that gives
+  you carb increments you can actually dial in.
+- An ingredient whose label prints only a gram serving — no scoop or volume — can take a
+  `unit` of `{ "label": "g", "grams": 1 }`. It is then dosed straight in grams and its recipe
+  line shows no separate natural amount. No current ingredient needs this.
 
 Pick `unit` for the granularity you need, not just the measure the label happens to print.
 Weights are shown to one decimal, so half-gram units stay honest.
@@ -87,7 +89,7 @@ The top-level `categories` array defines both the chip order and the grouping of
 ingredient list:
 
 ```json
-"categories": ["Protein", "Base", "Carbs", "Other"]
+"categories": ["Protein", "Base", "Carbs", "Fruit", "Flavor"]
 ```
 
 Chips filter the "Add ingredients" list and combine with the text box. Tapping the active chip
@@ -114,7 +116,9 @@ pick. Neither is wrong, they are just different sources.
 
 ## URL format
 
-The recipe is fully encoded in the query string — no storage, no server:
+A recipe's contents are fully encoded in the query string — no server involved. (Saved
+recipes, below, add a small `localStorage` layer on top of this, but it stores the same query
+string rather than any decoded state.)
 
 ```
 recipe.html?n=Post-workout&s=1&on-whey-chocolate=1&nutrilait-milk-1=1&banana=1
@@ -127,6 +131,29 @@ recipe.html?n=Post-workout&s=1&on-whey-chocolate=1&nutrilait-milk-1=1&banana=1
 Parameters are emitted in `ingredients.json` order, so the same shake always produces the same
 URL. Both pages accept the same query string, which is how "Edit recipe" round-trips. The URL
 is safe to hand-edit.
+
+## Saved recipes
+
+`saved.html` lists recipes saved from the recipe page's **Save** button, backed by
+`localStorage`. There is still no account and no server, so saves are per-browser and are lost
+if site data is cleared — use **Export** to copy a JSON backup and **Import** to restore it
+(also how you'd move saved recipes to a different browser or device).
+
+Storage key: `shake-builder.recipes`. Value shape:
+
+```json
+{
+  "v": 1,
+  "recipes": [
+    { "name": "Morning Shake", "query": "on-whey-chocolate=1&banana=1", "savedAt": "2026-08-27T12:00:00.000Z" }
+  ]
+}
+```
+
+Each entry stores a **name** and the **query string** `SB.encodeRecipe` would produce for that
+recipe — not decoded ingredient quantities — so a saved recipe replays through the same codec
+as a shared link and can't drift out of sync with it. `js/store.js` (`window.SBStore`) is the
+only file that touches `localStorage`; it doesn't know about ingredients or macros.
 
 ## Tests
 
@@ -151,9 +178,12 @@ That cross-check is informational, not a failure. Three entries legitimately tri
 ```
 index.html        builder
 recipe.html       shareable recipe page
+saved.html        saved-recipes list (localStorage)
 js/shared.js      ingredient loading, URL codec, macro math  (shared by both pages)
 js/builder.js     builder logic
 js/recipe.js      recipe page logic
+js/saved.js       saved-recipes page logic
+js/store.js       localStorage layer for saved recipes
 css/styles.css    mobile-first, light and dark
 ingredients.json  the ingredient database
 ingredients.txt   the source product list, by category

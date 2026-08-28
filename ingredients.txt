@@ -15,6 +15,10 @@ Oikos, Pro, Greek Yogurt, Plain, 13g Protein
 
 Saputo, Nutrilait, Partly Skimmed Milk, 1% M.F.
 
+Water, Tap
+
+Prana, Chia, Black
+
 
 Category: Carbs
 
@@ -24,12 +28,8 @@ Applied Nutrition, Carb-X, 100% Cyclic Dextrin Carbohydrates
 
 Quaker, Instant Oats
 
-E.D. Smith, Pure Pumpkin
 
-
-Category: Other
-
-Fry's, Premium Cocoa
+Category: Fruit
 
 Banana, Fresh
 
@@ -37,4 +37,37 @@ Raspberries, Frozen, Unsweetened
 
 Strawberries, Frozen, Unsweetened
 
-Prana, Chia, Black
+E.D. Smith, Pure Pumpkin
+
+
+Category: Flavor
+
+Splenda, Granulated Sweetener
+
+Fry's, Premium Cocoa
+
+Vanilla Extract
+
+LorAnn, Super Strength, Butter Rum
+
+LorAnn, Super Strength, Butterscotch
+
+LorAnn, Super Strength, Caramel
+
+LorAnn, Super Strength, Chocolate
+
+LorAnn, Super Strength, Coconut
+
+LorAnn, Super Strength, Cinnamon Roll
+
+LorAnn, Super Strength, Coffee
+
+LorAnn, Super Strength, English Toffee
+
+LorAnn, Super Strength, Maple
+
+LorAnn, Super Strength, Marshmallow
+
+LorAnn, Super Strength, Peanut Butter
+
+LorAnn, Super Strength, Root Beer

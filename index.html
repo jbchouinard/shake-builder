@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#faf7ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0c15" media="(prefers-color-scheme: dark)">
 <title>Shake Builder</title>
 <meta name="description" content="Build a shake and see its macros.">
 <link rel="stylesheet" href="css/styles.css">
@@ -12,16 +14,21 @@
   <h1>Shake Builder</h1>
 
   <div id="banner" hidden class="banner"></div>
+  <p class="nav"><a href="saved.html">Saved recipes</a></p>
 
   <div class="row-2">
     <label class="field">
       <span>Recipe name</span>
       <input type="text" id="name" placeholder="Shake" autocomplete="off">
     </label>
-    <label class="field">
-      <span>Servings</span>
-      <input type="number" id="servings" value="1" min="0.25" step="0.25" inputmode="decimal">
-    </label>
+    <div class="field field-servings" role="group" aria-labelledby="servings-label">
+      <span id="servings-label">Servings</span>
+      <div class="stepper" id="servings">
+        <button type="button" data-servings="-1" aria-label="Fewer servings">−</button>
+        <span class="qty" id="servings-qty">1</span>
+        <button type="button" data-servings="1" aria-label="More servings">+</button>
+      </div>
+    </div>
   </div>
 
   <!-- Catalog sits above "Your shake" deliberately: adding an ingredient grows the

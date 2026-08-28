@@ -11,7 +11,7 @@
         show(banner, 'This link references ingredient(s) not in ingredients.json: ' +
           decoded.unknown.join(', ') + '. They are missing from the totals below.');
       }
-      render(decoded, SB.computeTotals(decoded, data.list));
+      render(decoded, SB.computeTotals(decoded, data.list), data);
     })
     .catch(function (err) {
       show(banner, 'Could not load ingredients.json — ' + err.message +
@@ -19,7 +19,7 @@
       console.error(err);
     });
 
-  function render(recipe, totals) {
+  function render(recipe, totals, data) {
     var name = recipe.name || 'Shake';
     document.title = name + ' — shake recipe';
     document.getElementById('r-name').textContent = name;
@@ -68,6 +68,45 @@
       if (!lines.length) return flash(btn, 'Nothing to copy', 'Copy ingredients');
       copy(lines.join('\n'), function () { flash(btn, 'Copied ✓', 'Copy ingredients'); });
     });
+
+    document.getElementById('save-recipe').addEventListener('click', function () {
+      var btn = this;
+      if (!SBStore.available()) return flash(btn, 'Storage unavailable', 'Save');
+      if (!totals.lines.length) return flash(btn, 'Nothing to save', 'Save');
+
+      var saveName = recipe.name;
+      if (!saveName) {
+        var typed = window.prompt('Name this recipe:', 'Shake');
+        if (typed === null || !typed.trim()) return flash(btn, 'Save cancelled', 'Save');
+        saveName = typed.trim();
+      }
+
+      if (SBStore.find(saveName) !== -1) {
+        if (!window.confirm('Replace the saved recipe named "' + saveName + '"?')) {
+          return flash(btn, 'Save cancelled', 'Save');
+        }
+      }
+
+      // Re-encoding (rather than storing location.search verbatim) keeps the stored
+      // query in canonical ingredient order and lets a prompted-for name replace an
+      // absent n=. It also drops any unknown ingredient keys, same as builder.js does.
+      var query = SB.encodeRecipe({ name: saveName, servings: recipe.servings, qty: recipe.qty }, data.list);
+      var result = SBStore.save(saveName, query);
+      if (result.ok) adoptName(saveName, query);
+      flash(btn, result.ok ? 'Saved ✓' : 'Could not save', 'Save');
+    });
+
+    // A name typed into the save prompt becomes the recipe's name for real, so a
+    // second Save does not prompt again. The heading, title, edit link and address
+    // bar follow it, which also means copying the URL now shares the named recipe.
+    function adoptName(newName, query) {
+      if (recipe.name === newName) return;
+      recipe.name = newName;
+      document.title = newName + ' — shake recipe';
+      document.getElementById('r-name').textContent = newName;
+      document.getElementById('edit').href = 'index.html?' + query;
+      history.replaceState(null, '', location.pathname + '?' + query);
+    }
   }
 
   function setNum(id, value) {

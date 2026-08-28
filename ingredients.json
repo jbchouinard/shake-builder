@@ -5,7 +5,8 @@
     "Protein",
     "Base",
     "Carbs",
-    "Other"
+    "Fruit",
+    "Flavor"
   ],
   "ingredients": [
     {
@@ -129,6 +130,46 @@
       "verified": true
     },
     {
+      "id": "water",
+      "name": "Water",
+      "category": "Base",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 250
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "Water, Tap",
+      "verified": true
+    },
+    {
+      "id": "prana-chia-black",
+      "name": "Chia seeds, black",
+      "category": "Base",
+      "unit": {
+        "label": "tbsp",
+        "plural": "tbsp",
+        "grams": 10
+      },
+      "step": 0.5,
+      "per100g": {
+        "kcal": 466.67,
+        "carb": 40.0,
+        "fiber": 33.33,
+        "protein": 13.33,
+        "fat": 30.0
+      },
+      "cronometerName": "Prana, Chia, Black",
+      "verified": true
+    },
+    {
       "id": "dextrose",
       "name": "Dextrose",
       "category": "Carbs",
@@ -189,49 +230,9 @@
       "verified": true
     },
     {
-      "id": "ed-smith-pumpkin",
-      "name": "Canned pumpkin",
-      "category": "Carbs",
-      "unit": {
-        "label": "cup",
-        "plural": "cups",
-        "grams": 250
-      },
-      "step": 0.25,
-      "per100g": {
-        "kcal": 36.14,
-        "carb": 8.43,
-        "fiber": 2.41,
-        "protein": 1.2,
-        "fat": 0.0
-      },
-      "cronometerName": "E.D. Smith, Pure Pumpkin",
-      "verified": true
-    },
-    {
-      "id": "frys-cocoa",
-      "name": "Cocoa powder",
-      "category": "Other",
-      "unit": {
-        "label": "tbsp",
-        "plural": "tbsp",
-        "grams": 5
-      },
-      "step": 1,
-      "per100g": {
-        "kcal": 400.0,
-        "carb": 40.0,
-        "fiber": 40.0,
-        "protein": 20.0,
-        "fat": 10.0
-      },
-      "cronometerName": "Fry's, Premium Cocoa",
-      "verified": true
-    },
-    {
       "id": "banana",
       "name": "Banana",
-      "category": "Other",
+      "category": "Fruit",
       "unit": {
         "label": "medium",
         "plural": "medium",
@@ -251,7 +252,7 @@
     {
       "id": "raspberries-frozen",
       "name": "Raspberries, frozen",
-      "category": "Other",
+      "category": "Fruit",
       "unit": {
         "label": "cup",
         "plural": "cups",
@@ -271,7 +272,7 @@
     {
       "id": "strawberries-frozen",
       "name": "Strawberries, frozen",
-      "category": "Other",
+      "category": "Fruit",
       "unit": {
         "label": "cup",
         "plural": "cups",
@@ -289,23 +290,323 @@
       "verified": false
     },
     {
-      "id": "prana-chia-black",
-      "name": "Chia seeds, black",
-      "category": "Other",
+      "id": "ed-smith-pumpkin",
+      "name": "Canned pumpkin",
+      "category": "Fruit",
+      "unit": {
+        "label": "cup",
+        "plural": "cups",
+        "grams": 250
+      },
+      "step": 0.25,
+      "per100g": {
+        "kcal": 36.14,
+        "carb": 8.43,
+        "fiber": 2.41,
+        "protein": 1.2,
+        "fat": 0.0
+      },
+      "cronometerName": "E.D. Smith, Pure Pumpkin",
+      "verified": true
+    },
+    {
+      "id": "splenda-granulated",
+      "name": "Splenda Granulated Sweetener",
+      "category": "Flavor",
+      "unit": {
+        "label": "tsp",
+        "plural": "tsp",
+        "grams": 0.5
+      },
+      "step": 1.0,
+      "per100g": {
+        "kcal": 395.0,
+        "carb": 99.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "Splenda, Granulated Sweetener",
+      "verified": false
+    },
+    {
+      "id": "frys-cocoa",
+      "name": "Cocoa powder",
+      "category": "Flavor",
       "unit": {
         "label": "tbsp",
         "plural": "tbsp",
-        "grams": 10
+        "grams": 5
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 400.0,
+        "carb": 40.0,
+        "fiber": 40.0,
+        "protein": 20.0,
+        "fat": 10.0
+      },
+      "cronometerName": "Fry's, Premium Cocoa",
+      "verified": true
+    },
+    {
+      "id": "vanilla-extract",
+      "name": "Vanilla extract",
+      "category": "Flavor",
+      "unit": {
+        "label": "tsp",
+        "plural": "tsp",
+        "grams": 4
       },
       "step": 0.5,
       "per100g": {
-        "kcal": 466.67,
-        "carb": 40.0,
-        "fiber": 33.33,
-        "protein": 13.33,
-        "fat": 30.0
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
       },
-      "cronometerName": "Prana, Chia, Black",
+      "cronometerName": "Vanilla Extract",
+      "verified": false
+    },
+    {
+      "id": "lorann-butter-rum",
+      "name": "LorAnn Butter Rum",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Butter Rum",
+      "verified": true
+    },
+    {
+      "id": "lorann-butterscotch",
+      "name": "LorAnn Butterscotch",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Butterscotch",
+      "verified": true
+    },
+    {
+      "id": "lorann-caramel",
+      "name": "LorAnn Caramel",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Caramel",
+      "verified": true
+    },
+    {
+      "id": "lorann-chocolate",
+      "name": "LorAnn Chocolate",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Chocolate",
+      "verified": true
+    },
+    {
+      "id": "lorann-coconut",
+      "name": "LorAnn Coconut",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Coconut",
+      "verified": true
+    },
+    {
+      "id": "lorann-cinnamon-roll",
+      "name": "LorAnn Cinnamon Roll",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Cinnamon Roll",
+      "verified": true
+    },
+    {
+      "id": "lorann-coffee",
+      "name": "LorAnn Coffee",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Coffee",
+      "verified": true
+    },
+    {
+      "id": "lorann-english-toffee",
+      "name": "LorAnn English Toffee",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, English Toffee",
+      "verified": true
+    },
+    {
+      "id": "lorann-maple",
+      "name": "LorAnn Maple",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Maple",
+      "verified": true
+    },
+    {
+      "id": "lorann-marshmallow",
+      "name": "LorAnn Marshmallow",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Marshmallow",
+      "verified": true
+    },
+    {
+      "id": "lorann-peanut-butter",
+      "name": "LorAnn Peanut Butter",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Peanut Butter",
+      "verified": true
+    },
+    {
+      "id": "lorann-root-beer",
+      "name": "LorAnn Root Beer",
+      "category": "Flavor",
+      "unit": {
+        "label": "drop",
+        "plural": "drops",
+        "grams": 0.05
+      },
+      "step": 1,
+      "per100g": {
+        "kcal": 0.0,
+        "carb": 0.0,
+        "fiber": 0.0,
+        "protein": 0.0,
+        "fat": 0.0
+      },
+      "cronometerName": "LorAnn, Super Strength, Root Beer",
       "verified": true
     }
   ]

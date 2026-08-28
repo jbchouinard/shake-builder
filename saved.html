@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#faf7ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f0c15" media="(prefers-color-scheme: dark)">
+<title>Saved recipes</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="recipe-page">
+<div class="wrap">
+
+  <div id="banner" hidden class="banner"></div>
+  <p class="nav"><a href="index.html">Builder</a></p>
+
+  <h1>Saved recipes</h1>
+  <p class="note" id="saved-count">Nothing saved yet.</p>
+
+  <ul class="saved-list" id="saved-list"></ul>
+
+  <textarea class="io" id="io" hidden></textarea>
+  <button class="btn" id="io-apply" type="button" hidden>Import</button>
+
+  <div class="actions">
+    <button class="btn" id="export" type="button">Export</button>
+    <button class="btn" id="import" type="button">Import</button>
+    <a class="btn btn-primary" href="index.html">New shake</a>
+  </div>
+
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/store.js"></script>
+<script src="js/saved.js"></script>
+</body>
+</html>

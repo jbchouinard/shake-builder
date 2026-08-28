@@ -6,6 +6,7 @@
     banner: document.getElementById('banner'),
     name: document.getElementById('name'),
     servings: document.getElementById('servings'),
+    servingsQty: document.getElementById('servings-qty'),
     filter: document.getElementById('filter'),
     categories: document.getElementById('categories'),
     shake: document.getElementById('shake'),
@@ -18,18 +19,24 @@
 
   var data = null;                                   // { list, byId, categories }
   var recipe = { name: '', servings: 1, qty: {} };
-  var activeCategory = null;                         // null = show all
+  var activeCategory = 'Protein';                   // null = show all
 
   SB.loadIngredients()
     .then(function (loaded) {
       data = loaded;
       var decoded = SB.decodeRecipe(location.search, data.byId);
-      recipe = { name: decoded.name, servings: decoded.servings, qty: decoded.qty };
+      // Servings are whole numbers: an older link carrying a fractional s= is rounded
+      // to the nearest whole shake rather than shown in a stepper that could never
+      // produce it. encodeRecipe omits s= at 1, so only multi-serving links are affected.
+      recipe = {
+        name: decoded.name,
+        servings: Math.max(1, Math.round(decoded.servings)),
+        qty: decoded.qty
+      };
       if (decoded.unknown.length) {
         banner('Ignored unknown ingredient(s) in the link: ' + decoded.unknown.join(', '));
       }
       els.name.value = recipe.name;
-      els.servings.value = SB.fmtQty(recipe.servings);
       bind();
       renderChips();
       renderAll();
@@ -54,9 +61,15 @@
       renderTotals();
     });
 
-    els.servings.addEventListener('input', function () {
-      var s = parseFloat(els.servings.value);
-      recipe.servings = isFinite(s) && s > 0 ? s : 1;
+    // Same stepper affordance as an ingredient row, but scoped to its own container
+    // and its own data attribute so the delegated [data-step] handler ignores it.
+    els.servings.addEventListener('click', function (ev) {
+      var btn = ev.target.closest('[data-servings]');
+      if (!btn) return;
+      var next = recipe.servings + parseInt(btn.dataset.servings, 10);
+      if (next < 1) return;
+      recipe.servings = next;
+      renderServings();
       renderTotals();
     });
 
@@ -92,9 +105,8 @@
     els.reset.addEventListener('click', function () {
       recipe = { name: '', servings: 1, qty: {} };
       els.name.value = '';
-      els.servings.value = '1';
       els.filter.value = '';
-      activeCategory = null;
+      activeCategory = 'Protein';
       history.replaceState(null, '', location.pathname);
       renderChips();
       renderAll();
@@ -117,7 +129,12 @@
   function renderAll() {
     renderShake();
     renderCatalog();
+    renderServings();
     renderTotals();
+  }
+
+  function renderServings() {
+    els.servingsQty.textContent = String(recipe.servings);
   }
 
   function renderShake() {
@@ -137,7 +154,7 @@
 
   function renderChips() {
     els.categories.innerHTML = '';
-    [null].concat(data.categories).forEach(function (cat) {
+    data.categories.concat(null).forEach(function (cat) {
       var chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'chip';
